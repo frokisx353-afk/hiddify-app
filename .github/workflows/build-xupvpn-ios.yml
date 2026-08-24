@@ -11,13 +11,14 @@ jobs:
   build:
     runs-on: macos-15
     steps:
-      - name: Rewrite submodule SSH URLs to HTTPS
-        run: git config --global url."https://github.com/".insteadOf "ssh://git@github.com/"
-
-      - name: Checkout (with submodules)
+      - name: Checkout
         uses: actions/checkout@v4
-        with:
-          submodules: recursive
+
+      - name: Init hiddify-core submodule over HTTPS
+        run: |
+          git config -f .gitmodules submodule.hiddify-core.url https://github.com/hiddify/hiddify-core.git
+          git submodule sync
+          git submodule update --init --force --depth=1 --recursive
 
       - name: Setup Flutter 3.38.5
         uses: subosito/flutter-action@v2
