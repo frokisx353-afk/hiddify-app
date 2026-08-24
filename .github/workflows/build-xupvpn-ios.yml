@@ -14,10 +14,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Init hiddify-core submodule over HTTPS
+      - name: Init submodules over HTTPS
         run: |
+          git config url."https://github.com/".insteadOf "ssh://git@github.com/"
           git config -f .gitmodules submodule.hiddify-core.url https://github.com/hiddify/hiddify-core.git
-          git submodule sync
+          git submodule sync --recursive
           git submodule update --init --force --depth=1 --recursive
 
       - name: Setup Flutter 3.38.5
