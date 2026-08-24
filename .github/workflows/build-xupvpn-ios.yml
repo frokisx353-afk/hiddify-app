@@ -6,6 +6,11 @@ on:
 env:
   IS_GITHUB_ACTIONS: 1
   CHANNEL: dev
+  GIT_CONFIG_COUNT: 2
+  GIT_CONFIG_KEY_0: url.https://github.com/.insteadOf
+  GIT_CONFIG_VALUE_0: ssh://git@github.com/
+  GIT_CONFIG_KEY_1: url.https://github.com/.insteadOf
+  GIT_CONFIG_VALUE_1: git@github.com:
 
 jobs:
   build:
@@ -16,8 +21,6 @@ jobs:
 
       - name: Init submodules over HTTPS
         run: |
-          git config url."https://github.com/".insteadOf "ssh://git@github.com/"
-          git config --add url."https://github.com/".insteadOf "git@github.com/"
           git config -f .gitmodules submodule.hiddify-core.url https://github.com/hiddify/hiddify-core.git
           git submodule sync --recursive
           git submodule update --init --force --depth=1 --recursive
