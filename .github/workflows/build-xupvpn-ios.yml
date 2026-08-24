@@ -17,6 +17,7 @@ jobs:
       - name: Init submodules over HTTPS
         run: |
           git config url."https://github.com/".insteadOf "ssh://git@github.com/"
+          git config --add url."https://github.com/".insteadOf "git@github.com/"
           git config -f .gitmodules submodule.hiddify-core.url https://github.com/hiddify/hiddify-core.git
           git submodule sync --recursive
           git submodule update --init --force --depth=1 --recursive
