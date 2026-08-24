@@ -34,8 +34,14 @@ jobs:
       - name: Codegen (pub get + build_runner + slang)
         run: make get gen translate
 
-      - name: Download prebuilt core (HiddifyCore.xcframework)
-        run: make ios-libs
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.25.x'
+          cache-dependency-path: hiddify-core/go.sum
+
+      - name: Build HiddifyCore.xcframework from source
+        run: make build-ios-libs
 
       - name: CocoaPods install
         run: |
