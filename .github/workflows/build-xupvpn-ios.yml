@@ -24,6 +24,12 @@ jobs:
           git submodule sync --recursive
           git submodule update --init --force --depth=1 --recursive
 
+      - name: Select newest Xcode (need 26+ for Icon Composer)
+        run: |
+          ls -d /Applications/Xcode*.app
+          sudo xcode-select -s "$(ls -d /Applications/Xcode*.app | sort -V | tail -1)"
+          xcodebuild -version
+
       - name: Setup Flutter 3.38.5
         uses: subosito/flutter-action@v2
         with:
