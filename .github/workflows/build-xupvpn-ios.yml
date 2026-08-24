@@ -34,24 +34,10 @@ jobs:
       - name: Codegen (pub get + build_runner + slang)
         run: make get gen translate
 
-      - name: Setup Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: '1.25.x'
-          cache-dependency-path: hiddify-core/go.sum
-
-      - name: Build HiddifyCore.xcframework from source
-        run: |
-          cd hiddify-core
-          go install -v github.com/sagernet/gomobile/cmd/gomobile@v0.1.11
-          go install -v github.com/sagernet/gomobile/cmd/gobind@v0.1.11
-          "$(go env GOPATH)/bin/gomobile" bind -v -target ios -libname=hiddify-core -tags=with_gvisor,with_quic,with_wireguard,with_utls,with_clash_api,with_grpc,with_awg,tfogo_checklinkname0,with_conntrack,with_dhcp,with_low_memory,with_purego -trimpath -ldflags='-w -s -checklinkname=0 -buildid=' -o bin/HiddifyCore.xcframework github.com/sagernet/sing-box/experimental/libbox ./platform/mobile
-
-      - name: Move framework into place
-        run: |
-          mkdir -p ios/Frameworks
-          rm -rf ios/Frameworks/HiddifyCore.xcframework
-          mv hiddify-core/bin/HiddifyCore.xcframework ios/Frameworks/HiddifyCore.xcframework
+      - name: Download prebuilt core (HiddifyCore.xcframework)
+        run: make ios-libs
+        env:
+          CHANNEL: prod
 
       - name: CocoaPods install
         run: |
